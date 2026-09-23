@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 280">
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef2ff"/>
+      <stop offset="1" stop-color="#e0e7ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="420" height="280" rx="16" fill="url(#a)"/>
+  <rect x="30" y="30" width="360" height="220" rx="14" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+  <text x="56" y="74" font-family="Arial, sans-serif" font-size="15" font-weight="800" fill="#1e293b">KNOWLEDGE CHECK</text>
+  <rect x="56" y="92" width="300" height="10" rx="5" fill="#e2e8f0"/>
+  <rect x="56" y="110" width="260" height="10" rx="5" fill="#e2e8f0"/>
+  <rect x="56" y="142" width="308" height="34" rx="10" fill="#eef2ff" stroke="#c7d2fe"/>
+  <circle cx="76" cy="159" r="9" fill="#ffffff" stroke="#818cf8" stroke-width="2"/>
+  <text x="62" y="164" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#4338ca">Which nutrient provides the most energy per gram?</text>
+  <rect x="56" y="186" width="308" height="34" rx="10" fill="#eef2ff" stroke="#c7d2fe"/>
+  <circle cx="76" cy="203" r="9" fill="#ffffff" stroke="#818cf8" stroke-width="2"/>
+  <text x="62" y="208" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#4338ca">How many calories per gram does protein provide?</text>
+  <rect x="56" y="230" width="110" height="14" rx="7" fill="#4f46e5"/>
+  <text x="111" y="240" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">CHECK ANSWERS</text>
+</svg>
