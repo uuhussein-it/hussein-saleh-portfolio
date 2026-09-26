@@ -215,23 +215,16 @@ export default function ClippyAssistant() {
     return () => document.removeEventListener("mousedown", onDown);
   }, [helpOpen]);
 
-  const go = (href: string, tip?: string) => {
-    const agent = agentRef.current;
-    if (agent) {
-      agent.hide(true);
-    }
+  const go = (href: string) => {
     setHelpOpen(false);
-    if (tip) {
-      setTimeout(() => {
-        const a = document.createElement("a");
-        a.href = href;
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-      }, 250);
-    } else {
-      window.location.href = href;
+    if (href.startsWith("#")) {
+      const el = document.getElementById(href.slice(1));
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      return;
     }
+    window.location.href = href;
   };
 
   return (
@@ -239,19 +232,19 @@ export default function ClippyAssistant() {
       {helpOpen && (
         <div className="clippy-controls">
           <div className="clippy-links">
-            <button type="button" onClick={() => go("#about", TIPS.about)}>
+            <button type="button" onClick={() => go("#about")}>
               About
             </button>
-            <button type="button" onClick={() => go("#projects", TIPS.projects)}>
+            <button type="button" onClick={() => go("#projects")}>
               Projects
             </button>
-            <button type="button" onClick={() => go("#skills", TIPS.skills)}>
+            <button type="button" onClick={() => go("#skills")}>
               Skills
             </button>
             <button type="button" onClick={() => go("/resume.pdf")}>
               Resume
             </button>
-            <button type="button" onClick={() => go("#contact", TIPS.contact)}>
+            <button type="button" onClick={() => go("#contact")}>
               Contact
             </button>
           </div>

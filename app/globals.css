@@ -65,6 +65,13 @@ a:hover {
   padding: 96px 0;
 }
 
+#about,
+#skills,
+#projects,
+#contact {
+  scroll-margin-top: 84px;
+}
+
 .section-alt {
   background: var(--slate-50);
 }
