@@ -45,8 +45,16 @@ interface ClippyAgent {
   hide: (fast?: boolean, callback?: () => void) => void;
   moveTo: (x: number, y: number, duration?: number) => void;
   speak: (text: string, hold?: boolean) => void;
-  _el?: HTMLElement;
+  play?: (name: string, timeout?: number, cb?: () => void) => boolean;
+  hasAnimation?: (name: string) => boolean;
+  _el?: ClippyNode;
   _hidden?: boolean;
+}
+
+interface ClippyNode {
+  jquery?: boolean;
+  get?: (index: number) => HTMLElement;
+  remove?: () => void;
 }
 
 let libsPromise: Promise<void> | null = null;
@@ -116,9 +124,16 @@ export default function ClippyAssistant() {
 
   const attachHelpToggle = (agent: ClippyAgent) => {
     const el = agent._el;
-    if (el) {
-      el.addEventListener("click", () => setHelpOpen((v) => !v));
-    }
+    if (!el) return;
+
+    const node = el.jquery && typeof el.get === "function" ? el.get(0) : null;
+    if (!node) return;
+
+    node.addEventListener("click", (e) => {
+      if (e.button !== 0) return;
+      setHelpOpen((v) => !v);
+    });
+    node.addEventListener("contextmenu", (e) => e.preventDefault());
   };
 
   const loadAgent = async (name: string) => {
@@ -140,7 +155,10 @@ export default function ClippyAssistant() {
         agent.show(true);
         positionAgent(agent);
         attachHelpToggle(agent);
-        agent.speak(`Hi! I'm ${name}. Click me for quick links and tips.`, true);
+        agent.speak(`Hi! I'm ${name}. Click me for quick links and tips.`);
+        if (agent.hasAnimation) {
+          agent.play?.("Wave");
+        }
       },
       () => {
         console.error("clippy load failed for:", name);

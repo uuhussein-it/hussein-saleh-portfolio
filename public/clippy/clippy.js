@@ -380,6 +380,7 @@ clippy.Agent.prototype = {
     },
 
     _onMouseDown:function (e) {
+        if (e.which !== 1) return;
         e.preventDefault();
         this._startDrag(e);
     },
