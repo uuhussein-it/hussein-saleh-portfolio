@@ -109,7 +109,8 @@ export default function Home() {
             <h2 className="section-title">Skills & Tools</h2>
             <p className="section-subtitle center-block">
               The frameworks, tools, and practices I use to design and build
-              effective learning experiences.
+              effective learning experiences — including modern AI-assisted
+              workflows.
             </p>
           </div>
           <div className="skills-grid">

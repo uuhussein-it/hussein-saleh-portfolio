@@ -74,6 +74,16 @@ export const skills = [
     ],
   },
   {
+    title: "AI-Assisted Design",
+    items: [
+      "ChatGPT",
+      "Claude",
+      "Gemini",
+      "AI Image Tools",
+      "AI Voice & Video",
+    ],
+  },
+  {
     title: "Delivery & Collaboration",
     items: [
       "Instructor-led Training",
