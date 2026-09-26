@@ -828,41 +828,11 @@ a:hover {
 }
 
 /* Clippy assistant */
-.clippy-shell {
+.clippy-controls {
   position: fixed;
-  z-index: 2000;
   right: 18px;
   bottom: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
-  pointer-events: none;
-}
-
-.clippy-shell > * {
-  pointer-events: auto;
-}
-
-.clippy-fab {
-  border: none;
-  cursor: pointer;
-  background: var(--indigo-600);
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 14px 22px;
-  border-radius: 999px;
-  box-shadow: 0 10px 28px rgba(79, 70, 229, 0.4);
-  transition: all 0.2s ease;
-}
-
-.clippy-fab:hover {
-  background: var(--indigo-700);
-  transform: translateY(-2px);
-}
-
-.clippy-controls {
+  z-index: 2000;
   background: #ffffff;
   border: 1px solid var(--slate-200);
   border-radius: 16px;
@@ -928,12 +898,9 @@ a:hover {
 }
 
 @media (max-width: 600px) {
-  .clippy-shell {
+  .clippy-controls {
     right: 12px;
     bottom: 12px;
-  }
-
-  .clippy-controls {
     max-width: 220px;
   }
 }

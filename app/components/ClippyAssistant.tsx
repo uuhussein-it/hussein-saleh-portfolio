@@ -51,6 +51,15 @@ interface ClippyAgent {
 
 let libsPromise: Promise<void> | null = null;
 
+function preloadImage(src: string) {
+  if (document.querySelector(`link[href="${src}"]`)) return;
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.as = "image";
+  link.href = src;
+  document.head.appendChild(link);
+}
+
 function loadScripts(): Promise<void> {
   if (libsPromise) return libsPromise;
 
@@ -96,8 +105,7 @@ function loadScripts(): Promise<void> {
 }
 
 export default function ClippyAssistant() {
-  const [active, setActive] = useState(false);
-  const [ready, setReady] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [avatar, setAvatar] = useState("Clippy");
   const agentRef = useRef<ClippyAgent | null>(null);
   const firedRef = useRef<Set<string>>(new Set());
@@ -106,7 +114,15 @@ export default function ClippyAssistant() {
     agent.moveTo(Math.max(16, window.innerWidth - 210), window.innerHeight - 270);
   };
 
+  const attachHelpToggle = (agent: ClippyAgent) => {
+    const el = agent._el;
+    if (el) {
+      el.addEventListener("click", () => setHelpOpen((v) => !v));
+    }
+  };
+
   const loadAgent = async (name: string) => {
+    preloadImage(`/clippy/agents/${name}/map.png`);
     await loadScripts();
     window.clippy?.load(
       name,
@@ -121,27 +137,23 @@ export default function ClippyAssistant() {
         }
         agentRef.current = agent;
         setAvatar(name);
-        agent.show();
+        agent.show(true);
         positionAgent(agent);
-        agent.speak(`Hi! I'm ${name}. I pop up whenever you need a hand — try the quick links below.`);
-        setReady(true);
+        attachHelpToggle(agent);
+        agent.speak(`Hi! I'm ${name}. Click me for quick links and tips.`, true);
       },
       () => {
-        setReady(false);
         console.error("clippy load failed for:", name);
       }
     );
   };
 
   useEffect(() => {
-    if (!active) return;
-    loadAgent(avatar);
+    loadAgent("Clippy");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active]);
+  }, []);
 
   useEffect(() => {
-    if (!active) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -167,19 +179,30 @@ export default function ClippyAssistant() {
     });
 
     return () => observer.disconnect();
-  }, [active]);
+  }, []);
 
   useEffect(() => {
-    const agent = agentRef.current;
-    if (ready && agent) positionAgent(agent);
-  }, [ready]);
+    if (!helpOpen) return;
+
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const inPanel = target?.closest?.(".clippy-controls");
+      const inAvatar = target?.closest?.(".clippy");
+      if (!inPanel && !inAvatar) {
+        setHelpOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [helpOpen]);
 
   const go = (href: string, tip?: string) => {
     const agent = agentRef.current;
     if (agent) {
       agent.hide(true);
     }
-    setActive(false);
+    setHelpOpen(false);
     if (tip) {
       setTimeout(() => {
         const a = document.createElement("a");
@@ -194,8 +217,8 @@ export default function ClippyAssistant() {
   };
 
   return (
-    <div className="clippy-shell">
-      {active && (
+    <>
+      {helpOpen && (
         <div className="clippy-controls">
           <div className="clippy-links">
             <button type="button" onClick={() => go("#about", TIPS.about)}>
@@ -228,15 +251,6 @@ export default function ClippyAssistant() {
           </div>
         </div>
       )}
-
-      <button
-        type="button"
-        className="clippy-fab"
-        onClick={() => setActive((v) => !v)}
-        aria-label={active ? "Hide assistant" : "Show assistant"}
-      >
-        {active ? "Hide" : "Help"}
-      </button>
-    </div>
+    </>
   );
 }
