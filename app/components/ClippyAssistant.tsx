@@ -28,8 +28,8 @@ const TIPS: Record<string, string> = {
 
 declare global {
   interface Window {
-    CLIPPY_CDN?: string;
     clippy?: {
+      BASE_PATH?: string;
       load: (
         name: string,
         cb: (agent: ClippyAgent) => void,
@@ -85,7 +85,9 @@ function loadScripts(): Promise<void> {
     if (needClippy) tasks.push(loadOne("/clippy/clippy.js"));
 
     Promise.all(tasks).then(() => {
-      window.CLIPPY_CDN = "/clippy/agents/";
+      if (window.clippy) {
+        window.clippy.BASE_PATH = "/clippy/agents/";
+      }
       resolve();
     });
   });
@@ -126,6 +128,7 @@ export default function ClippyAssistant() {
       },
       () => {
         setReady(false);
+        console.error("clippy load failed for:", name);
       }
     );
   };
